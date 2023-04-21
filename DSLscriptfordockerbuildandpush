@@ -1,0 +1,28 @@
+job('<any-name>') {    
+scm {        
+git('<github repo https url>') {  node -> 
+                  
+  node / gitConfigName('<github credentials>')            
+  node / gitConfigEmail('<github user email>')        
+    }    
+}
+triggers {
+  githubPush()
+}   
+steps {        
+
+        dockerBuildAndPublish {
+            repositoryName('<dockerhub repo>')
+            tag('<any tag>')
+            registryCredentials('dockerhub credentials')
+            forcePull(false)
+            createFingerprints(false)
+            skipDecorate()
+            forceTag(false)
+        }
+
+  }
+}
+
+// provide github credentials only if github repo is private, if it's public repo, then you don't need to write 'node{}' part
+// provide credentials in both steps as IDs. you can find/create Ids in manage jenkins --> manage credentials
